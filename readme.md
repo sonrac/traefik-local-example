@@ -75,6 +75,13 @@ cp ~/.letsencrypt/config/live/$LOCAL_DOMAIN/privkey.pem ./certs/privkey.pem
 cp ~/.letsencrypt/config/live/$LOCAL_DOMAIN/fullchain.pem ./certs/cert.pem
 ```
 
+or run 
+
+```bash
+
+bash generate-cert.sh
+```
+
 ## Renew certificates when generated certificates was expired
 
 ```bash
@@ -87,6 +94,13 @@ certbot renew --dry-run \
 
 docker restart traefik
 
+```
+
+or run 
+
+```bash
+
+bash renew-certs.sh
 ```
 
 ## Setting up project:
