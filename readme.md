@@ -122,4 +122,6 @@ services:
 
 ## Traefik hub
 
+Generate token add add it to environment variable `HUB_TOKEN` or disable traefik hub agent if you don't need it.
+
 You can find more usages description [traefik hub](https://doc.traefik.io/traefik-hub/)
