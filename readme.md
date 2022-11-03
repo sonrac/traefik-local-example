@@ -1,6 +1,14 @@
 # Init docker
 
+## Goal
+
+Get trusted https-certificates clear and locally with real domain.
+
 ## Requirements
+
+1. Installed [docker](https://docker.com)
+2. Installed [python](https://python.org)
+3. Registered domain with [certbot plugin](https://github.com/search?q=certbot+plugin)
 
 ## Prepare certificates
 
