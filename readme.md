@@ -111,6 +111,12 @@ bash renew-certs.sh
 docker network create traefik
 ``` 
 
+* Start traefik 
+
+```bash
+docker-compose up -d
+```
+
 ## Example nginx docker-compose with traefik proxy
 
 ```yaml 
