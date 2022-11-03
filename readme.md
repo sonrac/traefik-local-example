@@ -130,7 +130,6 @@ services:
       - "traefik.http.services.some-service-nginx.loadBalancer.server.port=8080" # Proxied port
       - "traefik.docker.network=traefik" # Required. We need say traefik network for scan
     networks:
-      - resume
       - traefik
 ```
 
