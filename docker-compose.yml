@@ -1,0 +1,72 @@
+version: "3.9"
+
+services:
+  # =============================================================
+  #
+  #	TRAEFIK - reverse proxy
+  #
+  # =============================================================
+
+  traefik:
+#    image: traefik:2.8
+    image: traefik:latest
+    restart: always
+    privileged: true
+    command:
+      - "--log.level=INFO" # Allowed values are: DEBUG, INFO, TRACE
+      - "--api.dashboard=true"
+      - "--api.insecure=true"
+      - "--entrypoints.traefikhub-api.address=:8000"
+      - "--providers.file.directory=/traefik_conf/"
+      - "--providers.file.watch=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--providers.docker.network=traefik"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.traefikhub-api.address=:9900"
+      - "--experimental.hub"
+      - "--hub.tls.insecure"
+      - "--metrics.prometheus.addrouterslabels"
+      - "--entrypoints.web.http.redirections.entryPoint.to=web-secure"
+      - "--entrypoints.web.http.redirections.entryPoint.scheme=https"
+      - "--entrypoints.web-secure.address=:443"
+      - "--serverstransport.insecureskipverify=true"
+    container_name: traefik
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.api.rule=Host(`traefik.$LOCAL_DOMAIN`)"
+      - "traefik.http.routers.api.entrypoints=web-secure"
+      - "traefik.http.routers.api.tls.certresolver=certificate"
+      - "traefik.http.routers.api.tls.domains[0].main=*.$LOCAL_DOMAIN"
+      - "traefik.http.routers.api.service=api@internal"
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock # So that Traefik can listen to the Docker events
+      - ./certs:/certs:ro
+      - ./context/conf:/traefik_conf:ro
+    networks:
+      - traefik
+
+  traefik-hub:
+    image: ghcr.io/traefik/hub-agent-traefik:v0.8.0
+    container_name: traefik-hub
+    pull_policy: always
+    restart: always
+    privileged: true
+    volumes:
+      - ./certs:/certs:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    command:
+      - "run"
+      - "--auth-server.advertise-url=http://hub-agent"
+      - "--hub.token=${HUB_TOKEN}"
+      - "--traefik.host=traefik"
+      - "--traefik.tls.insecure=true"
+    networks:
+      - traefik
+
+networks:
+  traefik:
+    external: true
