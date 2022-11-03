@@ -104,7 +104,7 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.some-service-nginx.rule=Host(`some-service.$LOCAL_DOMAIN`)" # replace with your domain
       - "traefik.http.routers.some-service-nginx.entrypoints=web-secure" # Allow only https
-      - "traefik.http.routers.some-service-nginx.tls.certresolver=certificate" $ Certificates resolver
+      - "traefik.http.routers.some-service-nginx.tls.certresolver=certificate" # Certificates resolver
       - "traefik.http.services.some-service-nginx.loadBalancer.server.port=8080" # Proxied port
       - "traefik.docker.network=traefik" # Required. We need say traefik network for scan
     networks:
